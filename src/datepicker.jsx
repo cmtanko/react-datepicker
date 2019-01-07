@@ -129,6 +129,24 @@ var DatePicker = React.createClass({
       this.deferFocusInput()
     } else {
       this.props.onBlur(event)
+      if(this.props.dateFormat==='DD/MM/YYYY'){
+		let value = event.target.value.trim()
+      	let currentDate = moment()
+      	if (value === '' || value === undefined) {
+        	this.setSelected(currentDate, event)
+      	} else {
+        	let [newDate, newMonth, newYear] = value.split('/')
+
+        	newDate && currentDate.set('date', newDate)
+        	newMonth && currentDate.set('month', newMonth - 1)
+        	newMonth && currentDate.set('year', moment(newYear, 'YYYY').format('YYYY'))
+
+        	if (!moment(currentDate).isValid()) {
+          		currentDate = moment()
+        	}
+        	this.setSelected(currentDate, event)
+      }
+      }
     }
   },
 
